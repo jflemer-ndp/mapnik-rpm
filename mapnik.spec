@@ -4,7 +4,7 @@
 
 Name:      mapnik
 Version:   3.0.10
-Release:   2.ndp1
+Release:   3.ndp1
 Summary:   Free Toolkit for developing mapping applications
 Group:     Geography
 License:   LGPLv2+
@@ -23,7 +23,7 @@ BuildRequires: agg-devel
 BuildRequires: scons 
 BuildRequires: doxygen 
 BuildRequires: desktop-file-utils
-BuildRequires: libltdl-devel 
+BuildRequires: libtool-ltdl-devel
 BuildRequires: qt4-devel > 4.3
 BuildRequires: libxml2-devel 
 BuildRequires: boost-devel
@@ -32,8 +32,8 @@ BuildRequires: libtiff-devel
 BuildRequires: libjpeg-devel 
 BuildRequires: libpng-devel
 BuildRequires: cairomm-devel 
-BuildRequires: python-cairo-devel
-BuildRequires: freetype2-devel
+BuildRequires: pycairo-devel
+BuildRequires: freetype-devel
 BuildRequires: python-devel
 BuildRequires: pkgconfig(harfbuzz)
 BuildRequires: pkgconfig(libwebp)
@@ -219,6 +219,9 @@ popd
 
 
 %changelog
+* Mon May 02 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-3.ndp1
+- Use EL6 dep package names
+
 * Sun May 01 2016 James E. Flemer <james.flemer@ndpgroup.com> 3.0.10-2.ndp1
 - Replace Mageia macros
 
