@@ -1,0 +1,23 @@
+--- mapnik-v3.0.6/src/build.py.0000	2015-10-08 05:50:01.000000000 +0800
++++ mapnik-v3.0.6/src/build.py	2015-10-13 10:02:04.959556985 +0800
+@@ -56,10 +56,11 @@
+ filesystem = 'boost_filesystem%s' % env['BOOST_APPEND']
+ regex = 'boost_regex%s' % env['BOOST_APPEND']
+ system = 'boost_system%s' % env['BOOST_APPEND']
++iostreams = 'boost_iostreams%s' % env['BOOST_APPEND']
+ 
+ # clear out and re-set libs for this env
+ # note: order matters on linux: see lorder | tsort
+-lib_env['LIBS'] = [filesystem,
++lib_env['LIBS'] = [filesystem, iostreams,
+                    regex]
+ 
+ if env['HAS_CAIRO']:
+@@ -113,6 +114,7 @@
+     lib_env['LIBS'].insert(0, 'agg')
+ 
+ lib_env['LIBS'].append('z')
++lib_env['LIBS'].append('stdc++')
+ 
+ if env['PLATFORM'] == 'FreeBSD':
+     lib_env['LIBS'].append('pthread')
