@@ -1,10 +1,10 @@
 %define major 3
-%define libname %mklibname %{name}2_ %{major}
-%define develname %mklibname -d %{name}
+%define libname lib%{name}2_%{major}
+%define develname %{name}-devel
 
 Name:      mapnik
 Version:   3.0.10
-Release:   %mkrel 1
+Release:   2.ndp1
 Summary:   Free Toolkit for developing mapping applications
 Group:     Geography
 License:   LGPLv2+
@@ -219,6 +219,9 @@ popd
 
 
 %changelog
+* Sun May 01 2016 James E. Flemer <james.flemer@ndpgroup.com> 3.0.10-2.ndp1
+- Replace Mageia macros
+
 * Sun Mar 06 2016 spuhler <spuhler> 3.0.10-1.mga6
 + Revision: 986704
 - upgrade to vers 3.0.10
