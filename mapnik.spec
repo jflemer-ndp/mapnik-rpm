@@ -4,7 +4,7 @@
 
 Name:      mapnik
 Version:   3.0.10
-Release:   3.ndp1
+Release:   4.ndp1
 Summary:   Free Toolkit for developing mapping applications
 Group:     Geography
 License:   LGPLv2+
@@ -37,6 +37,7 @@ BuildRequires: freetype-devel
 BuildRequires: python-devel
 BuildRequires: pkgconfig(harfbuzz)
 BuildRequires: pkgconfig(libwebp)
+#BuildRequires: devtoolset-3-toolchain
 Requires:  fonts-ttf-dejavu
 Requires: %{libname} = %{version}-%{release}
 ExcludeArch: %{ix86}
@@ -130,6 +131,10 @@ library
 rm -fr demo
 
 %build
+set +e
+test -e /opt/rh/devtoolset-3/enable && . /opt/rh/devtoolset-3/enable
+test -e /opt/rh/devtoolset-4/enable && . /opt/rh/devtoolset-4/enable
+set -e
 
 # fix build flags
 #sed -i -e "s|common_cxx_flags = .-D\%s|common_cxx_flags = \'-D\%s %optflags |g" SConstruct
@@ -219,6 +224,9 @@ popd
 
 
 %changelog
+* Mon May 02 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-4.ndp1
+- Use devtoolset
+
 * Mon May 02 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-3.ndp1
 - Use EL6 dep package names
 
