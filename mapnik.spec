@@ -4,7 +4,7 @@
 
 Name:      mapnik
 Version:   3.0.10
-Release:   4.ndp1
+Release:   5.ndp1
 Summary:   Free Toolkit for developing mapping applications
 Group:     Geography
 License:   LGPLv2+
@@ -147,7 +147,7 @@ set -e
               GDAL_INCLUDES=%{_includedir}/gdal \
               CUSTOM_CFLAGS="%optflags" \
               CUSTOM_CXXFLAGS="%optflags" \
-              CUSTOM_LDFLAGS="%ldflags" \
+              CUSTOM_LDFLAGS="%{?ldflags}" \
               INTERNAL_LIBAGG=False \
               SYSTEM_FONTS=%{_datadir}/fonts \
               DEMO=False
@@ -224,6 +224,9 @@ popd
 
 
 %changelog
+* Mon May 02 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-5.ndp1
+- Better EL6 compat (no %ldflags)
+
 * Mon May 02 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-4.ndp1
 - Use devtoolset
 
