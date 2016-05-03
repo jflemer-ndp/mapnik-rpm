@@ -4,7 +4,7 @@
 
 Name:      mapnik
 Version:   3.0.10
-Release:   5.ndp1
+Release:   6.ndp1
 Summary:   Free Toolkit for developing mapping applications
 Group:     Geography
 License:   LGPLv2+
@@ -26,7 +26,7 @@ BuildRequires: desktop-file-utils
 BuildRequires: libtool-ltdl-devel
 BuildRequires: qt4-devel > 4.3
 BuildRequires: libxml2-devel 
-BuildRequires: boost-devel
+BuildRequires: boost-devel >= 1.47
 BuildRequires: libicu-devel
 BuildRequires: libtiff-devel 
 BuildRequires: libjpeg-devel 
@@ -35,6 +35,7 @@ BuildRequires: cairomm-devel
 BuildRequires: pycairo-devel
 BuildRequires: freetype-devel
 BuildRequires: python-devel
+BuildRequires: sqlite-devel
 BuildRequires: pkgconfig(harfbuzz)
 BuildRequires: pkgconfig(libwebp)
 #BuildRequires: devtoolset-3-toolchain
@@ -224,6 +225,9 @@ popd
 
 
 %changelog
+* Mon May 02 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-6.ndp1
+- Update deps
+
 * Mon May 02 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-5.ndp1
 - Better EL6 compat (no %ldflags)
 
