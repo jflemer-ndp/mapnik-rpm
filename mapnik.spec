@@ -2,9 +2,12 @@
 %define libname lib%{name}2_%{major}
 %define develname %{name}-devel
 
+%define postgresql postgresql95
+%define postgis postgis2_95
+
 Name:      mapnik
 Version:   3.0.10
-Release:   6.ndp1
+Release:   7.ndp1
 Summary:   Free Toolkit for developing mapping applications
 Group:     Geography
 License:   LGPLv2+
@@ -14,8 +17,8 @@ Source1:   mapnik-data.license
 Source2:   no_date_footer.html
 Source3:   viewer.desktop
 Patch0:    mapnik-v3.0.6-linking.patch
-BuildRequires: postgresql-devel 
-BuildRequires: postgis
+BuildRequires: %{postgresql}-devel 
+BuildRequires: %{postgis}
 BuildRequires: pkgconfig
 BuildRequires: gdal-devel 
 BuildRequires: proj-devel 
@@ -225,6 +228,9 @@ popd
 
 
 %changelog
+* Tue May 03 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-7.ndp1
+- Update postgres/postgis deps
+
 * Mon May 02 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-6.ndp1
 - Update deps
 
