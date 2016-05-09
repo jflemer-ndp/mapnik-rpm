@@ -7,7 +7,7 @@
 
 Name:      mapnik
 Version:   3.0.10
-Release:   7.ndp1
+Release:   8.ndp1
 Summary:   Free Toolkit for developing mapping applications
 Group:     Geography
 License:   LGPLv2+
@@ -143,35 +143,28 @@ set -e
 # fix build flags
 #sed -i -e "s|common_cxx_flags = .-D\%s|common_cxx_flags = \'-D\%s %optflags |g" SConstruct
 
-%configure    DESTDIR=%{buildroot} \
-              PREFIX=/usr \
-              LIBDIR_SCHEMA=%{buildroot}/%{_libdir} \
-              THREADING=multi \
-              XMLPARSER=libxml2 \
-              GDAL_INCLUDES=%{_includedir}/gdal \
-              CUSTOM_CFLAGS="%optflags" \
-              CUSTOM_CXXFLAGS="%optflags" \
-              CUSTOM_LDFLAGS="%{?ldflags}" \
-              INTERNAL_LIBAGG=False \
-              SYSTEM_FONTS=%{_datadir}/fonts \
-              DEMO=False
+PG_CONFIG=pg_config
+for d in /usr/pgsql-*/bin /usr/bin /usr/local/bin; do
+  if [ -e "$d/pg_config" ]; then
+    PG_CONFIG="$d/pg_config"
+    break
+  fi
+done
 
-%make
+libdir=%{_libdir}
+python scons/scons.py \
+  DESTDIR=%{buildroot} \
+  CUSTOM_CFLAGS="%optflags" \
+  CUSTOM_CXXFLAGS="%optflags" \
+  CUSTOM_LDFLAGS="%{?ldflags}" \
+  LIBDIR_SCHEMA=${libdir%%*/} \
+  PG_CONFIG="$PG_CONFIG" \
+  PREFIX=/usr \
+  SYSTEM_FONTS=%{_datadir}/fonts
 
-%install
+sed -i -e "s:%{buildroot}::g" utils/mapnik-config/mapnik-config
 
-%make_install 
-
-# get rid of fonts use external instead
-rm -rf %{buildroot}%{_libdir}/%{name}/fonts
-
-# install more utils
-mkdir -p %{buildroot}%{_bindir}
-#install -p -m 755 demo/viewer/viewer %{buildroot}%{_bindir}/
-#install -p -m 755 utils/stats/mapdef_stats.py %{buildroot}%{_bindir}/
-#install -p -m 644 %{SOURCE1} demo/data/
-
-# install pkgconfig file
+# make pkgconfig file
 cat > %{name}.pc <<EOF
 prefix=%{_prefix}
 exec_prefix=%{_prefix}
@@ -184,12 +177,36 @@ Libs: -lmapnik
 Cflags: -I${includedir}/%{name} -I${includedir}/agg
 EOF
 
+%install
+python scons/scons.py \
+  DESTDIR=%{buildroot} \
+  CUSTOM_CFLAGS="%optflags" \
+  CUSTOM_CXXFLAGS="%optflags" \
+  CUSTOM_LDFLAGS="%{?ldflags}" \
+  LIBDIR_SCHEMA=${libdir%%*/} \
+  PG_CONFIG="$PG_CONFIG" \
+  PREFIX=/usr \
+  SYSTEM_FONTS=%{_datadir}/fonts \
+  install
+
+chmod -x %{buildroot}/%{_includedir}/%{name}/agg/*.h || true
+
+# get rid of fonts use external instead
+rm -rf %{buildroot}%{_libdir}/%{name}/fonts
+
+# install more utils
+mkdir -p %{buildroot}%{_bindir}
+#install -p -m 755 demo/viewer/viewer %{buildroot}%{_bindir}/
+#install -p -m 755 utils/stats/mapdef_stats.py %{buildroot}%{_bindir}/
+#install -p -m 644 %{SOURCE1} demo/data/
+
+# install pkgconfig file
 mkdir -p %{buildroot}%{_datadir}/pkgconfig/
 install -p -m 644 %{name}.pc %{buildroot}%{_datadir}/pkgconfig/
 
 # install desktop file
 #desktop-file-install --vendor="mandriva" \
- #       --dir=%{buildroot}%{_datadir}/applications %{SOURCE3}
+#       --dir=%{buildroot}%{_datadir}/applications %{SOURCE3}
 
 %check
 
@@ -228,6 +245,9 @@ popd
 
 
 %changelog
+* Tue May 03 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-8.ndp1
+- WIP
+
 * Tue May 03 2016 James E. Flemer <james.flemer@ndpgroup.com> - 3.0.10-7.ndp1
 - Update postgres/postgis deps
 
