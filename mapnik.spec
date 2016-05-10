@@ -151,13 +151,13 @@ for d in /usr/pgsql-*/bin /usr/bin /usr/local/bin; do
   fi
 done
 
-libdir=%{_libdir}
 python scons/scons.py \
   DESTDIR=%{buildroot} \
+  CPP_TESTS=False \
   CUSTOM_CFLAGS="%optflags" \
   CUSTOM_CXXFLAGS="%optflags" \
   CUSTOM_LDFLAGS="%{?ldflags}" \
-  LIBDIR_SCHEMA=${libdir%%*/} \
+  LIBDIR_SCHEMA=%{_lib} \
   PG_CONFIG="$PG_CONFIG" \
   PREFIX=/usr \
   SYSTEM_FONTS=%{_datadir}/fonts
