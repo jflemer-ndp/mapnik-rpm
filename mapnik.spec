@@ -178,16 +178,12 @@ Cflags: -I${includedir}/%{name} -I${includedir}/agg
 EOF
 
 %install
-python scons/scons.py \
-  DESTDIR=%{buildroot} \
-  CUSTOM_CFLAGS="%optflags" \
-  CUSTOM_CXXFLAGS="%optflags" \
-  CUSTOM_LDFLAGS="%{?ldflags}" \
-  LIBDIR_SCHEMA=${libdir%%*/} \
-  PG_CONFIG="$PG_CONFIG" \
-  PREFIX=/usr \
-  SYSTEM_FONTS=%{_datadir}/fonts \
-  install
+set +e
+test -e /opt/rh/devtoolset-3/enable && . /opt/rh/devtoolset-3/enable
+test -e /opt/rh/devtoolset-4/enable && . /opt/rh/devtoolset-4/enable
+set -e
+
+python scons/scons.py install
 
 chmod -x %{buildroot}/%{_includedir}/%{name}/agg/*.h || true
 
