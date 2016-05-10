@@ -132,16 +132,11 @@ library
 %patch0 -p1
 
 
-rm -fr demo
-
 %build
 set +e
 test -e /opt/rh/devtoolset-3/enable && . /opt/rh/devtoolset-3/enable
 test -e /opt/rh/devtoolset-4/enable && . /opt/rh/devtoolset-4/enable
 set -e
-
-# fix build flags
-#sed -i -e "s|common_cxx_flags = .-D\%s|common_cxx_flags = \'-D\%s %optflags |g" SConstruct
 
 PG_CONFIG=pg_config
 for d in /usr/pgsql-*/bin /usr/bin /usr/local/bin; do
@@ -151,16 +146,20 @@ for d in /usr/pgsql-*/bin /usr/bin /usr/local/bin; do
   fi
 done
 
-python scons/scons.py \
-  DESTDIR=%{buildroot} \
+%{configure} \
+  DESTDIR="%{?buildroot}" \
+  DEMO=False \
   CPP_TESTS=False \
-  CUSTOM_CFLAGS="%optflags" \
-  CUSTOM_CXXFLAGS="%optflags" \
+  CUSTOM_CFLAGS="${CFLAGS}" \
+  CUSTOM_CXXFLAGS="${CXXFLAGS}" \
   CUSTOM_LDFLAGS="%{?ldflags}" \
   LIBDIR_SCHEMA=%{_lib} \
   PG_CONFIG="$PG_CONFIG" \
-  PREFIX=/usr \
-  SYSTEM_FONTS=%{_datadir}/fonts
+  PREFIX="%{_prefix}" \
+  SYSTEM_FONTS="%{_datadir}/fonts"
+
+JOBS="%{_smp_mflags}"
+make JOBS="${JOBS#-j}"
 
 sed -i -e "s:%{buildroot}::g" utils/mapnik-config/mapnik-config
 
@@ -183,7 +182,7 @@ test -e /opt/rh/devtoolset-3/enable && . /opt/rh/devtoolset-3/enable
 test -e /opt/rh/devtoolset-4/enable && . /opt/rh/devtoolset-4/enable
 set -e
 
-python scons/scons.py install
+make install
 
 chmod -x %{buildroot}/%{_includedir}/%{name}/agg/*.h || true
 
